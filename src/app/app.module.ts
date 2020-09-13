@@ -17,6 +17,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProfessorCadastroComponent } from './professor/professor-cadastro/professor-cadastro.component';
 import { ProfessorAulaComponent } from './professor/professor-aula/professor-aula.component';
+import { EsqueciMinhaSenhaComponent } from './login/esqueci-minha-senha/esqueci-minha-senha.component';
+import { AlunoCadastroComponent } from './aluno/aluno-cadastro/aluno-cadastro.component';
+import { AlunoAulaComponent } from './aluno/aluno-aula/aluno-aula.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { ProfessorAulaComponent } from './professor/professor-aula/professor-aul
     PrincipalComponent,
     LoginComponent,
     ProfessorCadastroComponent,
-    ProfessorAulaComponent
+    ProfessorAulaComponent,
+    EsqueciMinhaSenhaComponent,
+    AlunoCadastroComponent,
+    AlunoAulaComponent
   ],
   imports: [
     BrowserModule,

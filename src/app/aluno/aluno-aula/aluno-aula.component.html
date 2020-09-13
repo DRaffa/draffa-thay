@@ -1,0 +1,36 @@
+<div class="page-study">
+  <div class="container">
+    <header class="page-header">
+
+      <div class="top-bar-container">
+        <a href="/">
+          <img src="assets/img/icons/back.svg" alt="Voltar">
+        </a>
+      </div>
+      <div class="header-content">
+        <strong>Esses são os educanjos disponíveis</strong>
+        <form [formGroup]="form">
+          <div class="select-block">
+            <label for="idMateria">Matéria</label>
+            <select name="idMateria" id="idMateria" formControlName="idMateria">
+              <option value="0" selected disabled>Selecione uma opção</option>
+              <option *ngFor="let materia of listaMateria" [value]="materia.id">
+                {{materia.nome}}
+              </option>
+            </select>
+          </div>
+          <div class="select-block">
+            <label for="diaSemana">Dia da semana</label>
+            <select name="diaSemana" id="diaSemana" formControlName="diaSemana">
+              <option value="" selected disabled>Selecione uma opção</option>
+              <option *ngFor="let semana of listaSemana" [value]="semana.id">
+                {{semana.nome}}
+              </option>
+            </select>
+          </div>
+          <button type="submit">Filtrar</button>
+        </form>
+      </div>
+    </header>
+  </div>
+</div>

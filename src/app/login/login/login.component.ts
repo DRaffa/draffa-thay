@@ -1,3 +1,4 @@
+import { AlunoService } from './../../services/aluno.service';
 import { ProfessorService } from './../../services/professor.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -11,11 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   url = '';
+  urlEsqueciMinhaSenha = '';
   form = new FormGroup({});
   tipoLogin = '';
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router,
-    private professorService: ProfessorService) { }
+    private professorService: ProfessorService, private alunoService: AlunoService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -28,6 +30,12 @@ export class LoginComponent implements OnInit {
     if (this.tipoLogin !== 'professor' && this.tipoLogin !== 'aluno') {
       this.router.navigateByUrl('/');
       return;
+    }
+
+    if (this.tipoLogin === 'professor') {
+      this.urlEsqueciMinhaSenha = `/professor/esqueci-minha-senha`;
+    } else {
+      this.urlEsqueciMinhaSenha = `/aluno/esqueci-minha-senha`;
     }
   }
 
@@ -61,7 +69,19 @@ export class LoginComponent implements OnInit {
       );
 
     } else {
-      this.router.navigateByUrl('/aluno/aula');
+
+      this.alunoService.login({ email, senha }).subscribe((aluno) => {
+        if (!aluno || !aluno.id) {
+          alert('E-mail/ Senha inválidos');
+          return;
+        }
+
+        this.router.navigateByUrl(`/aluno/aula/${aluno.id}`);
+      },
+        (erro) => {
+          alert(erro.error);
+        }
+      );
     }
   }
 
