@@ -181,3 +181,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: var(--color-small-info);
   }
 /*Form.css*/
+
+.btn-atualizar {
+  height: 5.6rem;
+  background: var(--color-secundary);
+  color: var(--color-button-text);
+  border: 0;
+  padding: 0 20px;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font: 700 1.6rem Archivo;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: 0.2s;
+  margin-top: 3.2rem;
+}

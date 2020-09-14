@@ -5,8 +5,10 @@
         <a [routerLink]="['/aluno/login']" routerLinkActive="router-link-active">
           <img src="assets/img/icons/back.svg" alt="Voltar">
         </a>
+        <a *ngIf="aluno.id" class="btn-atualizar" (click)="voltarAula()">Voltar</a>
       </div>
       <div class="header-content">
+        <strong>Seja bem-vindo, {{aluno.nome}}</strong>
         <strong>Que incrível que você quer aprender</strong>
         <p>O primeiro passo é se cadastrar</p>
       </div>
@@ -38,7 +40,7 @@
         </fieldset>
         <fieldset id="materia-items">
           <legend>Matérias para requisição da aula
-            <button type="button" id="add-materia" (click)="incluirMateria()"> + Nova Matéria</button>
+            <button type="button" id="add-materia" (click)="incluirMateria(0)"> + Nova Matéria</button>
           </legend>
           <ng-container formArrayName="materias" *ngFor="let control of materias.controls; index as i">
             <ng-container [formGroupName]="i">

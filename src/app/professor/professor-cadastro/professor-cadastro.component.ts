@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProfessorService } from './../../services/professor.service';
 import { Professor } from './../../model/professor';
@@ -14,7 +15,8 @@ export class ProfessorCadastroComponent implements OnInit {
   form: FormGroup;
   professor = {} as Professor;
 
-  constructor(private fb: FormBuilder, private professorService: ProfessorService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private fb: FormBuilder, private professorService: ProfessorService, private router: Router,
+    private route: ActivatedRoute, private _location: Location) { }
 
   ngOnInit(): void {
 
@@ -101,6 +103,10 @@ export class ProfessorCadastroComponent implements OnInit {
         }
       );
     }
+  }
+
+  voltarAula(): void {
+    this._location.back();
   }
 
 }

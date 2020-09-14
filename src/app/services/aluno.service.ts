@@ -13,7 +13,14 @@ export class AlunoService {
     senha: '123',
     nome: 'Rafael',
     whatsapp: '11976235899',
-    materias: []
+    materias: [{
+      idMateria: 1,
+      idAluno: 1,
+    },
+    {
+      idMateria: 2,
+      idAluno: 1,
+    }]
   },
   {
     id: 2,
@@ -41,6 +48,14 @@ export class AlunoService {
   }
 
   alterar(aluno: Aluno): Observable<Aluno> {
+
+    aluno.materias = aluno.materias.map((materia) => {
+      return {
+        idMateria: +materia.idMateria,
+        idAluno: aluno.id
+      } as AlunoMateria;
+    });
+
     const alunoIndex = this.listaAlunos.findIndex(x => x.id === aluno.id);
     this.listaAlunos[alunoIndex] = { ...aluno };
     return of(aluno);

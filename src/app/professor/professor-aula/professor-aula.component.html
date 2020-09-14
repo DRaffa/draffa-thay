@@ -25,9 +25,9 @@
             </select>
           </div>
 
-          <div *ngIf="listaProfessorMateria.length && listaProfessorMateria.length > 0"
+          <div *ngIf="listaProfessorAgenda.length && listaProfessorAgenda.length > 0"
             style="width: 100%; margin: 20px 0;">
-            <table mat-table [dataSource]="listaProfessorMateria" class="mat-elevation-z8" style="width: 100%;">
+            <table mat-table [dataSource]="listaProfessorAgenda" class="mat-elevation-z8" style="width: 100%;">
               <ng-container matColumnDef="nomeMateria">
                 <th mat-header-cell *matHeaderCellDef> Matéria </th>
                 <td mat-cell *matCellDef="let element"> {{element.nomeMateria}} </td>

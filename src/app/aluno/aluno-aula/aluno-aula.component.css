@@ -141,7 +141,7 @@
   }
   .search-teachers {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1.5fr 1.5fr 1fr;
     gap: 16px;
     position: absolut;
     bottom: -28px;

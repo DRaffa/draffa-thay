@@ -6,6 +6,7 @@ import { AlunoService } from './../../services/aluno.service';
 import { Aluno } from './../../model/aluno';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-aluno-cadastro',
@@ -19,7 +20,8 @@ export class AlunoCadastroComponent implements OnInit {
   listaMatricula = [] as Base[];
 
   constructor(private fb: FormBuilder, private comumService: ComumService,
-    private alunoService: AlunoService, private router: Router, private route: ActivatedRoute) { }
+    private alunoService: AlunoService, private router: Router, private route: ActivatedRoute,
+    private _location: Location) { }
 
   ngOnInit(): void {
 
@@ -39,11 +41,14 @@ export class AlunoCadastroComponent implements OnInit {
           materias: this.fb.array([])
         });
 
-        this.incluirMateria();
 
-        // if (this.aluno.materias?.length > 0) {
-
-        // }
+        if (this.aluno.materias ?.length > 0) {
+          for (const materia of this.aluno.materias) {
+            this.incluirMateria(materia.idMateria);
+          }
+        } else {
+          this.incluirMateria(0);
+        }
 
       },
         (erro) => {
@@ -56,14 +61,14 @@ export class AlunoCadastroComponent implements OnInit {
     return this.form.controls.materias as FormArray;
   }
 
-  formMateria(): FormGroup {
+  formMateria(idMateria: number = 0): FormGroup {
     return this.fb.group({
-      idMateria: 0
+      idMateria
     });
   }
 
-  incluirMateria(): void {
-    this.materias.push(this.formMateria());
+  incluirMateria(idMateria: number): void {
+    this.materias.push(this.formMateria(idMateria));
   }
 
   gravar(): void {
@@ -116,5 +121,9 @@ export class AlunoCadastroComponent implements OnInit {
         }
       );
     }
+  }
+
+  voltarAula(): void {
+    this._location.back();
   }
 }

@@ -5,7 +5,7 @@
         <a [routerLink]="['/professor/login']" routerLinkActive="router-link-active">
           <img src="assets/img/icons/back.svg" alt="Voltar">
         </a>
-        <img src="assets/img/logo.svg" alt="Proffy">
+        <a *ngIf="professor.id" class="btn-atualizar" (click)="voltarAula()">Voltar</a>
       </div>
       <div class="header-content">
         <strong>Que incrível que você quer dar aulas</strong>

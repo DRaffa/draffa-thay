@@ -1,3 +1,4 @@
+import { Professor } from './../../model/professor';
 import { forkJoin } from 'rxjs';
 import { AlunoService } from './../../services/aluno.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,19 +18,24 @@ export class AlunoAulaComponent implements OnInit {
 
   listaMateria = [] as Base[];
   listaSemana = [] as Base[];
+  listaProfessor = [] as Professor[];
   aluno = {} as Aluno;
   form = new FormGroup({});
+  loading = false;
 
-  constructor(private fb: FormBuilder, private comumService: ComumService, private alunoService: AlunoService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private fb: FormBuilder, private comumService: ComumService, private alunoService: AlunoService,
+    private professorService: ProfessorService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
 
     const id = +this.route.snapshot.paramMap.get('id');
 
-    forkJoin(this.comumService.listarMateria(), this.comumService.listarSemana(), this.alunoService.obter({ id })).subscribe((resultados) => {
-      this.listaMateria = resultados[0];
+    forkJoin([this.comumService.listarMateria(), this.comumService.listarSemana(), this.alunoService.obter({ id })]).subscribe((resultados) => {
+      // this.listaMateria = resultados[0];
       this.listaSemana = resultados[1];
       this.aluno = resultados[2];
+
+      this.listaMateria = resultados[0].filter(mat => this.aluno.materias.findIndex(al => al.idMateria === mat.id) >= 0);
 
       this.form = this.fb.group({
         id: 0,
@@ -42,11 +48,53 @@ export class AlunoAulaComponent implements OnInit {
     },
       (erro) => {
         alert(erro.error);
+      },
+      () => {
+        this.filtrarProfessorAgenda();
       }
     );
   }
 
   atualizarDados(): void {
     this.router.navigateByUrl(`/aluno/atualizar/${this.aluno.id}`);
+  }
+
+  filtrarProfessorAgenda(): void {
+
+    this.loading = true;
+    const listaMatriculaAluno = +this.form.controls.idMateria.value ?
+      [+this.form.controls.idMateria.value] : this.listaMateria.map((materia) => materia.id);
+    this.listaProfessor = [];
+    this.professorService.listarProfessorAgenda({
+      idsMateria: listaMatriculaAluno,
+      diaSemana: +this.form.controls.diaSemana.value,
+    }).subscribe((professores) => {
+
+      setTimeout(() => {
+        if (professores ?.length > 0) {
+          this.listaProfessor = [...professores];
+        } else {
+          this.listaProfessor = [];
+        }
+        this.loading = false;
+      }, 500);
+
+    });
+  }
+
+  obterMateria(professor: Professor): string {
+    const materias = [] as string[];
+    let materiaExibida = '';
+
+
+    for (const agenda of professor.agendas) {
+      agenda.nomeMateria = this.listaMateria.find(x => x.id === agenda.idMateria).nome;
+      if (materias.findIndex(x => x === agenda.nomeMateria) < 0) {
+        materias.push(agenda.nomeMateria);
+        materiaExibida += `/ ${agenda.nomeMateria}`;
+      }
+    }
+
+    return materiaExibida.substring(2);
   }
 }

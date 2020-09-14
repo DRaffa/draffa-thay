@@ -1,4 +1,4 @@
-import { Professor, ProfessorMateria } from './../../model/professor';
+import { Professor, ProfessorAgenda } from './../../model/professor';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfessorService } from './../../services/professor.service';
@@ -17,7 +17,7 @@ export class ProfessorAulaComponent implements OnInit {
   listaMateria = [] as Base[];
   listaSemana = [] as Base[];
   professor = {} as Professor;
-  listaProfessorMateria = [] as ProfessorMateria[];
+  listaProfessorAgenda = [] as ProfessorAgenda[];
   form = new FormGroup({});
   nomeColunas: string[] = ['nomeMateria', 'valor', 'horarioInicio', 'horarioFim', 'opcao'];
   diaSemana: number;
@@ -62,14 +62,14 @@ export class ProfessorAulaComponent implements OnInit {
     }).subscribe((agendas) => {
 
       if (agendas ?.length > 0) {
-        this.listaProfessorMateria = agendas.map(
-          (professorMateria) => {
-            professorMateria.nomeMateria = this.listaMateria.find(x => x.id === professorMateria.idMateria).nome;
-            return professorMateria;
+        this.listaProfessorAgenda = agendas.map(
+          (ProfessorAgenda) => {
+            ProfessorAgenda.nomeMateria = this.listaMateria.find(x => x.id === ProfessorAgenda.idMateria).nome;
+            return ProfessorAgenda;
           });
       }
 
-      this.listaProfessorMateria = agendas;
+      this.listaProfessorAgenda = agendas;
     });
   }
 
@@ -83,39 +83,43 @@ export class ProfessorAulaComponent implements OnInit {
   }
 
   incluirAgenda(): void {
-    const professorMateria = this.form.value as ProfessorMateria;
+    const ProfessorAgenda = this.form.value as ProfessorAgenda;
 
-    professorMateria.diaSemana = +this.diaSemana;
-    professorMateria.idMateria = +professorMateria.idMateria;
+    ProfessorAgenda.diaSemana = +this.diaSemana;
+    ProfessorAgenda.idMateria = +ProfessorAgenda.idMateria;
 
-    if (!professorMateria.diaSemana) {
+    if (ProfessorAgenda.indVoluntario) {
+      ProfessorAgenda.valor = 0;
+    }
+
+    if (!ProfessorAgenda.diaSemana) {
       alert('Selecione a dia da semana.');
       return;
     }
 
-    if (!professorMateria.idMateria) {
+    if (!ProfessorAgenda.idMateria) {
       alert('Selecione a matricula.');
       return;
     }
 
-    if (!professorMateria.indVoluntario && !professorMateria.valor) {
+    if (!ProfessorAgenda.indVoluntario && !ProfessorAgenda.valor) {
       alert('Informe o valor aula.');
       return;
     }
 
-    if (!professorMateria.horarioInicio) {
+    if (!ProfessorAgenda.horarioInicio) {
       alert('Selecione a horário de início.');
       return;
     }
 
-    if (!professorMateria.horarioFim) {
+    if (!ProfessorAgenda.horarioFim) {
       alert('Selecione a horário de fim.');
       return;
     }
 
-    this.professorService.incluirAgenda(professorMateria).subscribe((response) => {
+    this.professorService.incluirAgenda(ProfessorAgenda).subscribe((response) => {
       this.preencherAgenda(this.diaSemana.toString());
-      this.form.controls.horarioInicio.setValue(professorMateria.horarioFim);
+      this.form.controls.horarioInicio.setValue(ProfessorAgenda.horarioFim);
       this.form.controls.horarioFim.setValue('');
     },
       (error) => {

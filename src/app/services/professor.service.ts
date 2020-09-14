@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { Professor, ProfessorMateria } from './../model/professor';
+import { Professor, ProfessorAgenda } from './../model/professor';
 import { Injectable } from '@angular/core';
 
 
@@ -15,7 +15,7 @@ export class ProfessorService {
     senha: '123',
     nome: 'Rafael',
     whatsapp: '11976235899',
-    avatar: 'teste'
+    avatar: 'https://media-exp1.licdn.com/dms/image/C4D03AQHW7qGNFKMz5g/profile-displayphoto-shrink_400_400/0?e=1605744000&v=beta&t=hMNr6VS3xpub82bepomzV-BovIeCeP2yFIN252UylXI'
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ export class ProfessorService {
     senha: '123',
     nome: 'Thayani',
     whatsapp: '11976235899',
-    avatar: 'teste'
+    avatar: 'https://media-exp1.licdn.com/dms/image/C4D03AQG4GI7O42ajKw/profile-displayphoto-shrink_400_400/0?e=1605744000&v=beta&t=QRWgwvax25kvS1ht-kW2lhk5aH1y86rlLddIC11Gyms'
   }] as Professor[];
 
   listaAgenda = [{
@@ -56,7 +56,17 @@ export class ProfessorService {
     idProfessor: 1,
     diaSemana: 1,
     indVoluntario: false,
-  }] as ProfessorMateria[];
+  },
+  {
+    id: 3,
+    valor: 10,
+    horarioFim: '9:00',
+    horarioInicio: '8:00',
+    idMateria: 1,
+    idProfessor: 2,
+    diaSemana: 1,
+    indVoluntario: false,
+  }] as ProfessorAgenda[];
 
   constructor() { }
 
@@ -87,17 +97,17 @@ export class ProfessorService {
     return of(professor);
   }
 
-  listarAgenda(parametro: { idProfessor: number, diaSemana: number }): Observable<ProfessorMateria[]> {
+  listarAgenda(parametro: { idProfessor: number, diaSemana: number }): Observable<ProfessorAgenda[]> {
     const listaAgenda = this.listaAgenda.filter(x => x.idProfessor === parametro.idProfessor && x.diaSemana === parametro.diaSemana);
     return of(listaAgenda);
   }
 
-  incluirAgenda(professorMateria: ProfessorMateria): Observable<ProfessorMateria> {
+  incluirAgenda(professorAgenda: ProfessorAgenda): Observable<ProfessorAgenda> {
 
-    const professorMateriaAgenda = { ...professorMateria };
-    professorMateriaAgenda.id = this.listaAgenda.length + 1;
-    this.listaAgenda.push(professorMateriaAgenda);
-    return of(professorMateriaAgenda);
+    const ProfessorAgendaAgenda = { ...professorAgenda };
+    ProfessorAgendaAgenda.id = this.listaAgenda.length + 1;
+    this.listaAgenda.push(ProfessorAgendaAgenda);
+    return of(ProfessorAgendaAgenda);
   }
 
   excluirAgenda(parametro: { id: number }): Observable<void> {
@@ -111,5 +121,27 @@ export class ProfessorService {
     }
 
     return of();
+  }
+
+  listarProfessorAgenda(parametro: { idsMateria: number[], diaSemana: number }): Observable<Professor[]> {
+    const agendasFiltro = this.listaAgenda.filter(ag => parametro.idsMateria.findIndex(id => id === ag.idMateria) >= 0 && ag.diaSemana === (parametro.diaSemana || ag.diaSemana));
+
+    // Obtendo os professores com agenda
+    const professores = this.listaProfessores.filter(prof => agendasFiltro.findIndex(ag => ag.idProfessor === prof.id) >= 0);
+
+    // Associar as agendas ao professor
+
+    const lista = professores.map((professor) => {
+      professor.agendas = agendasFiltro.filter(ag => ag.idProfessor === professor.id);
+      return professor;
+    });
+
+    if (lista ?.length > 0) {
+      return of([...lista]);
+    } else {
+      return of([]);
+    }
+
+
   }
 }

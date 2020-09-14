@@ -13,13 +13,15 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProfessorCadastroComponent } from './professor/professor-cadastro/professor-cadastro.component';
 import { ProfessorAulaComponent } from './professor/professor-aula/professor-aula.component';
 import { EsqueciMinhaSenhaComponent } from './login/esqueci-minha-senha/esqueci-minha-senha.component';
 import { AlunoCadastroComponent } from './aluno/aluno-cadastro/aluno-cadastro.component';
 import { AlunoAulaComponent } from './aluno/aluno-aula/aluno-aula.component';
+import { AlunoAulaDetalheComponent } from './aluno/aluno-aula/aluno-aula-detalhe/aluno-aula-detalhe.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { AlunoAulaComponent } from './aluno/aluno-aula/aluno-aula.component';
     ProfessorAulaComponent,
     EsqueciMinhaSenhaComponent,
     AlunoCadastroComponent,
-    AlunoAulaComponent
+    AlunoAulaComponent,
+    AlunoAulaDetalheComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,9 @@ import { AlunoAulaComponent } from './aluno/aluno-aula/aluno-aula.component';
     MatSlideToggleModule,
     MatTableModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatTabsModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

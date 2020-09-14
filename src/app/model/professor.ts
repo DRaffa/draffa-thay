@@ -6,9 +6,10 @@ export interface Professor {
   avatar: string;
   whatsapp: string;
   biografia: string;
+  agendas: ProfessorAgenda[];
 }
 
-export interface ProfessorMateria {
+export interface ProfessorAgenda {
   id: number;
   idProfessor: number;
   idMateria: number;
